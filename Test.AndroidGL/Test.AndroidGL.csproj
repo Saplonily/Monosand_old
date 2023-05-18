@@ -1,0 +1,38 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFramework>net7.0-android</TargetFramework>
+		<SupportedOSPlatformVersion>23</SupportedOSPlatformVersion>
+		<OutputType>Exe</OutputType>
+		<ApplicationId>com.monosand.TestAndroidGL</ApplicationId>
+		<ApplicationVersion>1</ApplicationVersion>
+		<ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
+		<ImplicitUsings>enable</ImplicitUsings>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+	  <AndroidCreatePackagePerAbi>True</AndroidCreatePackagePerAbi>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+	  <AndroidCreatePackagePerAbi>True</AndroidCreatePackagePerAbi>
+	  <AndroidPackageFormat>apk</AndroidPackageFormat>
+	  <RunAOTCompilation>False</RunAOTCompilation>
+	  <PublishTrimmed>False</PublishTrimmed>
+	</PropertyGroup>
+	<ItemGroup>
+		<PackageReference Include="MonoGame.Content.Builder.Task" Version="3.8.1.303" />
+		<PackageReference Include="MonoGame.Framework.Android" Version="3.8.1.303" />
+	</ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\Monosand\Monosand.csproj" />
+		<Using Include="Microsoft.Xna.Framework" />
+		<Using Include="Microsoft.Xna.Framework.Graphics" />
+		<Using Include="Microsoft.Xna.Framework.Input" />
+		<Using Include="Microsoft.Xna.Framework.Audio" />
+		<Using Include="Microsoft.Xna.Framework.Content" />
+		<Using Include="Microsoft.Xna.Framework.Input.Touch" />
+		<Using Include="Microsoft.Xna.Framework.Design" />
+	</ItemGroup>
+	<Target Name="RestoreDotnetTools" BeforeTargets="Restore">
+		<Message Text="Restoring dotnet tools" Importance="High" />
+		<Exec Command="dotnet tool restore" />
+	</Target>
+</Project>
