@@ -8,20 +8,19 @@ public class MyGame : Core
     {
         base.Initialize();
         Window.AllowUserResizing = true;
-        PreferWindowSize(800, 600);
+        PreferWindowSize(1200, 800);
         Scene = new MyScene();
     }
 }
 
 public class MyScene : Scene
 {
+    public SpriteFont Font;
+
     public override void Begin()
     {
         base.Begin();
-        Entity e = new();
-        e.AddComponent(new TextComponent("你好这里是组件", Core.Asset.Load<SpriteFont>("font1"), Vector2.Zero, Color.White));
-        e.AddComponent(new TextComponent("你好这里是组件2!", Core.Asset.Load<SpriteFont>("font1"), Vector2.UnitY * 20f, Color.White));
-        AddEntity(e);
+        Font = Core.Asset.Load<SpriteFont>("font1");
     }
 
     public override void Update()
@@ -47,5 +46,13 @@ public class MyScene : Scene
         {
             Camera.Rotation -= MathF.PI / 180;
         }
+    }
+
+    public override void Draw()
+    {
+        base.Draw();
+        Drawing.Batch.Begin(samplerState: CameraSamplerState, transformMatrix: Camera.InvertedMatrix);
+        Drawing.DrawText(Font, $"a quick brown fox jumps over the lazy dog", Vector2.Zero, Color.White);
+        Drawing.Batch.End();
     }
 }

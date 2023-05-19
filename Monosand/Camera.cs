@@ -4,6 +4,7 @@ public class Camera
 {
     protected bool dirty;
     protected Matrix matrix;
+    protected Matrix invertedMatrix;
 
     protected Vector2 scale;
     protected Vector2 translation;
@@ -49,20 +50,20 @@ public class Camera
         rotation = 0f;
     }
 
-    public virtual Matrix Matrix
+    protected virtual void UpdateMatrix()
     {
-        get
-        {
-            if (!dirty) return matrix;
-            Vector2 originPos = size * origin;
-            matrix =
-                Matrix.CreateTranslation(-originPos.X, -originPos.Y, 0f) *
-                Matrix.CreateRotationZ(rotation) *
-                Matrix.CreateTranslation(originPos.X, originPos.Y, 0f) *
-                Matrix.CreateScale(scale.X, scale.Y, 1f) *
-                Matrix.CreateTranslation(translation.X, translation.Y, 0f);
-            dirty = false;
-            return matrix;
-        }
+        Vector2 originPos = size * origin;
+        matrix =
+            Matrix.CreateTranslation(-originPos.X, -originPos.Y, 0f) *
+            Matrix.CreateRotationZ(rotation) *
+            Matrix.CreateTranslation(originPos.X, originPos.Y, 0f) *
+            Matrix.CreateScale(scale.X, scale.Y, 1f) *
+            Matrix.CreateTranslation(translation.X, translation.Y, 0f);
+        invertedMatrix = Matrix.Invert(matrix);
+        dirty = false;
     }
+
+    public Matrix Matrix { get { if (!dirty) return matrix; UpdateMatrix(); return matrix; } }
+
+    public Matrix InvertedMatrix { get { if (!dirty) return invertedMatrix; UpdateMatrix(); return invertedMatrix; } }
 }

@@ -13,7 +13,7 @@ with.
     <Spacing>0</Spacing>
     <UseKerning>true</UseKerning>
     <Style>Regular</Style>
-    <!-- <DefaultCharacter>*</DefaultCharacter> -->
+    <DefaultCharacter>▢</DefaultCharacter>
     <CharacterRegions>
       <CharacterRegion>
         <Start>&#10;</Start>

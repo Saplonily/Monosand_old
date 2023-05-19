@@ -5,11 +5,15 @@ public class Entity
     public double Layer;
     public double Depth;
     public Vector2 Position;
+
     public Scene Scene { get; internal set; }
     public EntityComponentList Components { get; internal set; }
 
     public Entity()
         => Components = new(this);
+
+    public T SceneAs<T>() where T : Scene
+        => Scene as T;
 
     public void AddComponent(Component component)
         => Components.Add(component);

@@ -32,8 +32,8 @@ public class Scene
 
     public virtual void Draw()
     {
-        var batch = Core.CoreIns.SpriteBatch;
-        batch.Begin(transformMatrix: Matrix.Invert(Camera.Matrix), samplerState: CameraSamplerState);
+        var batch = Drawing.Batch;
+        batch.Begin(transformMatrix: Camera.InvertedMatrix, samplerState: CameraSamplerState);
         Entities.Draw();
         batch.End();
     }
