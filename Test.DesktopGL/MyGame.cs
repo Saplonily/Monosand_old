@@ -28,24 +28,18 @@ public class MyScene : Scene
     public override void Update()
     {
         base.Update();
+        Vector2 dir = new();
         if (Input.IsKeyPressed(Keys.D))
-        {
-            Camera.Position += Vector2.UnitX;
-        }
+            dir += Vector2.UnitX;
         if (Input.IsKeyPressed(Keys.W))
-        {
-            Camera.Position -= Vector2.UnitY;
-        }
+            dir -= Vector2.UnitY;
         if (Input.IsKeyPressed(Keys.S))
-        {
-            Camera.Position += Vector2.UnitY;
-        }
+            dir += Vector2.UnitY;
         if (Input.IsKeyPressed(Keys.A))
-        {
-            Camera.Position -= Vector2.UnitX;
-        }
+            dir -= Vector2.UnitX;
+        Camera.Position += dir * 5;
 
-        if(Input.IsKeyPressed(Keys.E))
+        if (Input.IsKeyPressed(Keys.E))
         {
             Camera.Rotation += MathF.PI / 180;
         }
@@ -95,6 +89,10 @@ public class Bg : Entity
     public override void Draw()
     {
         base.Draw();
-        Core.CoreIns.GraphicsDevice.Clear(Color.CornflowerBlue);
+        Vector2 from = Scene.Camera.Center;
+        Vector2 to = Input.MousePosition;
+        Vector2 size = to - from;
+        Drawing.DrawTexture(bgTex, Position);
+        Drawing.DrawHollowRectangle(from, size, Color.White);
     }
 }

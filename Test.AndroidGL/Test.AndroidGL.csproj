@@ -22,7 +22,6 @@
 		<PackageReference Include="MonoGame.Framework.Android" Version="3.8.1.303" />
 	</ItemGroup>
 	<ItemGroup>
-		<ProjectReference Include="..\Monosand\Monosand.csproj" />
 		<Using Include="Microsoft.Xna.Framework" />
 		<Using Include="Microsoft.Xna.Framework.Graphics" />
 		<Using Include="Microsoft.Xna.Framework.Input" />

@@ -15,6 +15,7 @@ public class Camera
     public virtual Vector2 Translation { get => translation; set { translation = value; dirty = true; } }
     public virtual float Rotation { get => rotation; set { rotation = value; dirty = true; } }
     public virtual Vector2 Origin { get => origin; set { origin = value; dirty = true; } }
+    public Vector2 Center => Position + Size / 2;
     public virtual Vector2 Size
     {
         get => size;
@@ -54,7 +55,7 @@ public class Camera
         {
             if (!dirty) return matrix;
             Vector2 originPos = size * origin;
-            matrix = 
+            matrix =
                 Matrix.CreateTranslation(-originPos.X, -originPos.Y, 0f) *
                 Matrix.CreateRotationZ(rotation) *
                 Matrix.CreateTranslation(originPos.X, originPos.Y, 0f) *

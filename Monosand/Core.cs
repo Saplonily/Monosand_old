@@ -8,6 +8,7 @@ public class Core : Game
     protected GraphicsDeviceManager graphics;
     protected SpriteBatch spriteBatch;
 
+    public static ContentManager Asset => CoreIns.Content;
     public static Core CoreIns { get; private set; }
     internal static DisplayMode DisplayMode => GraphicsAdapter.DefaultAdapter.CurrentDisplayMode;
     public static Vector2 ScreenSize => new(DisplayMode.Width, DisplayMode.Height);
@@ -19,6 +20,7 @@ public class Core : Game
     public Color? ClearColor { get; set; }
     public SpriteBatch SpriteBatch => spriteBatch;
     public Scene Scene { get => scene; set => nextScene = value; }
+    public SamplerState DefaultCameraSamplerState { get; set; } = SamplerState.PointClamp;
     public double Fps
     {
         get => 1d / gameTime.ElapsedGameTime.TotalSeconds;
@@ -31,6 +33,7 @@ public class Core : Game
         graphics = new GraphicsDeviceManager(this);
         IsMouseVisible = true;
         ClearColor = Color.CornflowerBlue;
+        Content.RootDirectory = "Content";
     }
 
     public void PreferWindowSize(int width, int height)
@@ -42,7 +45,6 @@ public class Core : Game
 
     protected override void Initialize()
     {
-        graphics.ApplyChanges();
         base.Initialize();
     }
 
@@ -74,6 +76,8 @@ public class Core : Game
             GraphicsDevice.SetRenderTarget(scene.CameraRenderTarget);
             scene.Draw();
             GraphicsDevice.SetRenderTarget(null);
+            if (ClearColor is not null)
+                GraphicsDevice.Clear(ClearColor.Value);
             SpriteBatch.Begin();
             SpriteBatch.Draw(scene.CameraRenderTarget, Vector2.Zero, Color.White);
             SpriteBatch.End();

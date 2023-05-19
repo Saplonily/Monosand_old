@@ -5,6 +5,7 @@ public class Scene
     public RenderTarget2D CameraRenderTarget { get; internal set; }
     public SceneEntityList Entities { get; internal set; }
     public Camera Camera { get; set; }
+    public SamplerState CameraSamplerState { get; set; }
     public Tracker Tracker { get; internal set; }
 
     public Scene()
@@ -14,6 +15,7 @@ public class Scene
         Camera = new(wSize);
         CameraRenderTarget = new(Core.CoreIns.GraphicsDevice, (int)wSize.X, (int)wSize.Y);
         Tracker = new();
+        CameraSamplerState = Core.CoreIns.DefaultCameraSamplerState;
     }
 
     public void AddEntity(Entity entity)
@@ -31,7 +33,7 @@ public class Scene
     public virtual void Draw()
     {
         var batch = Core.CoreIns.SpriteBatch;
-        batch.Begin(transformMatrix: Matrix.Invert(Camera.Matrix));
+        batch.Begin(transformMatrix: Matrix.Invert(Camera.Matrix), samplerState: CameraSamplerState);
         Entities.Draw();
         batch.End();
     }
