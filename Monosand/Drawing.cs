@@ -17,6 +17,18 @@ public static class Drawing
     public static void DrawTexture(Texture2D texture, Vector2 position)
         => Batch.Draw(texture, position, Color.White);
 
+    public static void DrawTexture(Texture2D texture, Vector2 position, Vector2 origin, Vector2 scale, float rotation)
+        => Batch.Draw(texture, position, null, Color.White, rotation, origin, scale, SpriteEffects.None, 0f);
+
+    public static void DrawTexture(Texture2D texture, Vector2 position, Vector2 origin, Vector2 scale, float rotation, Color color)
+        => Batch.Draw(texture, position, null, color, rotation, origin, scale, SpriteEffects.None, 0f);
+
+    public static void DrawText(SpriteFont spriteFont, string text, Vector2 position, Color color)
+        => DrawText(spriteFont, text, position, Vector2.Zero, Vector2.One, 0f, color);
+
+    public static void DrawText(SpriteFont spriteFont, string text, Vector2 position, Vector2 origin, Vector2 scale, float rotation, Color color)
+        => Batch.DrawString(spriteFont, text, position, color, rotation, origin, scale, SpriteEffects.None, 0f);
+
     public static void DrawPoint(Vector2 position, Color color)
         => Batch.Draw(Pixel, position, color);
 

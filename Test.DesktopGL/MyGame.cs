@@ -18,11 +18,10 @@ public class MyScene : Scene
     public override void Begin()
     {
         base.Begin();
-        AddEntity(new TextEntity(new(100, 100), "你好这是文字最底层"));
-        AddEntity(new TextEntity(new(100, 120), "你好这是文字第二层"));
-        AddEntity(new TextEntity(new(100, 140), "你好这是文字最高层"));
-        AddEntity(new TextEntity(new(100, 160), "你好这是文字比最高好高的层"));
-        AddEntity(new Bg());
+        Entity e = new();
+        e.AddComponent(new TextComponent("你好这里是组件", Core.Asset.Load<SpriteFont>("font1"), Vector2.Zero, Color.White));
+        e.AddComponent(new TextComponent("你好这里是组件2!", Core.Asset.Load<SpriteFont>("font1"), Vector2.UnitY * 20f, Color.White));
+        AddEntity(e);
     }
 
     public override void Update()
@@ -48,51 +47,5 @@ public class MyScene : Scene
         {
             Camera.Rotation -= MathF.PI / 180;
         }
-    }
-}
-
-[Tracked]
-public class TextEntity : Entity
-{
-    private string text;
-    private SpriteFont font;
-
-    public TextEntity(Vector2 position, string text)
-    {
-        Position = position;
-        this.text = text;
-        font = Core.CoreIns.Content.Load<SpriteFont>("font1");
-    }
-
-    public override void Update()
-    {
-        base.Update();
-        //Position += Vector2.UnitX;
-    }
-
-    public override void Draw()
-    {
-        base.Draw();
-        Core.CoreIns.SpriteBatch.DrawString(font, $"mpos: {Input.MousePosition}", Position, Color.White);
-    }
-}
-
-public class Bg : Entity
-{
-    private Texture2D bgTex;
-
-    public Bg()
-    {
-        bgTex = Core.CoreIns.Content.Load<Texture2D>("bg1");
-    }
-
-    public override void Draw()
-    {
-        base.Draw();
-        Vector2 from = Scene.Camera.Center;
-        Vector2 to = Input.MousePosition;
-        Vector2 size = to - from;
-        Drawing.DrawTexture(bgTex, Position);
-        Drawing.DrawHollowRectangle(from, size, Color.White);
     }
 }

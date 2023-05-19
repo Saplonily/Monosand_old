@@ -11,6 +11,12 @@ public class Entity
     public Entity()
         => Components = new(this);
 
+    public void AddComponent(Component component)
+        => Components.Add(component);
+
+    public void RemoveComponent(Component component)
+        => Components.Remove(component);
+
     public virtual void Update()
         => Components.Update();
 

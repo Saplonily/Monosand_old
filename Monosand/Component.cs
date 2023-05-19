@@ -2,6 +2,7 @@
 
 public class Component
 {
+    public bool Visible = true;
     public Entity Entity { get; internal set; }
     public Scene Scene => Entity.Scene;
 

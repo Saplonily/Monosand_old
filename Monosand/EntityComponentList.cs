@@ -58,8 +58,11 @@ public class EntityComponentList : IReadOnlyCollection<Component>
     {
         foreach (var component in current)
         {
-            //TODO: depth
-            component.Draw();
+            if (component.Visible)
+            {
+                //TODO: depth
+                component.Draw();
+            }
         }
     }
 
