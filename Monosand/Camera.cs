@@ -6,29 +6,27 @@ public class Camera
     protected Matrix matrix;
     protected Matrix invertedMatrix;
 
+    protected RectangleF bound;
     protected Vector2 scale;
-    protected Vector2 translation;
     protected float rotation;
-    protected Vector2 size;
-    protected Vector2 origin; /* 0 ~ 1 */
+    protected Vector2 origin;
 
-    public Vector2 Position { get => Translation; set => Translation = value; }
-    public virtual Vector2 Translation { get => translation; set { translation = value; dirty = true; } }
-    public virtual float Rotation { get => rotation; set { rotation = value; dirty = true; } }
-    public virtual Vector2 Origin { get => origin; set { origin = value; dirty = true; } }
-    public Vector2 Center => Position + Size / 2;
-    public virtual Vector2 Size
+    public RectangleF Bound => bound;
+    public Vector2 Position { get => bound.Position; set { bound.Position = value; dirty = true; } }
+    public float Rotation { get => rotation; set { rotation = value; dirty = true; } }
+    public Vector2 Origin { get => origin; set { origin = value; dirty = true; } }
+    public Vector2 Size
     {
-        get => size;
+        get => bound.Size;
         set
         {
             if (value is { X: 0 } or { Y: 0 })
                 throw new ArgumentException("Size cannot be 0.", nameof(value));
-            size = value;
+            bound.Size = value;
             dirty = true;
         }
     }
-    public virtual Vector2 Scale
+    public Vector2 Scale
     {
         get => scale;
         set
@@ -42,23 +40,22 @@ public class Camera
 
     public Camera(Vector2 size)
     {
-        dirty = true;
-        this.size = size;
-        origin = new(0.5f);
+        bound.Position = default;
+        bound.Size = size;
+        origin = bound.Size / 2;
         scale = Vector2.One;
-        translation = default;
         rotation = 0f;
+        dirty = true;
     }
 
     protected virtual void UpdateMatrix()
     {
-        Vector2 originPos = size * origin;
         matrix =
-            Matrix.CreateTranslation(-originPos.X, -originPos.Y, 0f) *
+            Matrix.CreateTranslation(-origin.X, -origin.Y, 0f) *
             Matrix.CreateRotationZ(rotation) *
-            Matrix.CreateTranslation(originPos.X, originPos.Y, 0f) *
+            Matrix.CreateTranslation(origin.X, origin.Y, 0f) *
             Matrix.CreateScale(scale.X, scale.Y, 1f) *
-            Matrix.CreateTranslation(translation.X, translation.Y, 0f);
+            Matrix.CreateTranslation(bound.Position.X, bound.Position.Y, 0f);
         invertedMatrix = Matrix.Invert(matrix);
         dirty = false;
     }

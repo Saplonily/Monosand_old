@@ -53,6 +53,7 @@ public class MyScene : Scene
         base.Draw();
         Drawing.Batch.Begin(samplerState: CameraSamplerState, transformMatrix: Camera.InvertedMatrix);
         Drawing.DrawText(Font, $"a quick brown fox jumps over the lazy dog", Vector2.Zero, Color.White);
+        Drawing.DrawLine(Camera.Bound.Size, Input.MousePosition, Color.White, 2f);
         Drawing.Batch.End();
     }
 }

@@ -33,6 +33,20 @@ public struct RectangleF
     public readonly Vector2 BottomCenter => Position + new Vector2(Width / 2, Height);
     public readonly float Area => Width * Height;
 
+    public RectangleF() { }
+
+    public RectangleF(Vector2 position, Vector2 size)
+        => (Position, Size) = (position, size);
+
+    public RectangleF(float x, float y, float width, float height)
+        => (X, Y, Width, Height) = (x, y, width, height);
+
+    public RectangleF(float x, float y, Vector2 size)
+        => (X, Y, Size) = (x, y, size);
+
+    public RectangleF(Vector2 position, float width, float height)
+        => (Position, Width, Height) = (position, width, height);
+
     public readonly override bool Equals([NotNullWhen(true)] object obj)
         => obj is RectangleF r && r == this;
 

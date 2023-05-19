@@ -5,7 +5,9 @@ public class Entity
     public double Layer;
     public double Depth;
     public Vector2 Position;
+    public Vector2 Size;
 
+    public RectangleF Bound => new(Position, Size);
     public Scene Scene { get; internal set; }
     public EntityComponentList Components { get; internal set; }
 
