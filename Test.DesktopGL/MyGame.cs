@@ -29,11 +29,11 @@ public class TestEntity : Entity
     {
         base.Draw();
         angle += MathF.PI / 180;
-        var s = Scene.Entities;
         Drawing.DrawRectangle(Position, Size, Color.AliceBlue);
         Drawing.DrawHollowRectangle(Position, Size, Color.Black);
         Drawing.DrawHollowRectangle(Position, new(600f, 60f), Color.CornflowerBlue);
-        Drawing.DrawText(SceneAs<MyScene>().Font, $"d: {Depth}, l: {DepthLayer}", Bound.Center, TextAlign.Center, Color.CornflowerBlue);
+        Drawing.DrawText(SceneAs<MyScene>().Font, $"d: {Depth}, l: {DepthLayer}", Bound.Center, 
+            TextAlign.Center, Vector2.One, angle, Color.CornflowerBlue);
     }
 }
 
