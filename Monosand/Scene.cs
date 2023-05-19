@@ -7,15 +7,21 @@ public class Scene
     public Camera Camera { get; set; }
     public SamplerState CameraSamplerState { get; set; }
     public Tracker Tracker { get; internal set; }
+    public Vector2 CameraCullingPadding { get; set; }
+    public Comparison<Entity> EntitySorting { get; }
 
-    public Scene()
+    public Scene() : this(Entity.CompareByDepth) { }
+
+    public Scene(Comparison<Entity> entitySorting)
     {
-        Entities = new(this);
         Vector2 wSize = new(Core.CoreIns.WindowSize.X, Core.CoreIns.WindowSize.Y);
-        Camera = new(wSize);
         CameraRenderTarget = new(Core.CoreIns.GraphicsDevice, (int)wSize.X, (int)wSize.Y);
-        Tracker = new();
         CameraSamplerState = Core.CoreIns.DefaultCameraSamplerState;
+        CameraCullingPadding = new Vector2(64, 64);
+        Camera = new(wSize);
+        Tracker = new();
+        Entities = new(this);
+        EntitySorting = entitySorting;
     }
 
     public void AddEntity(Entity entity)

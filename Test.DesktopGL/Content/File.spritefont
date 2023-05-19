@@ -9,7 +9,7 @@ with.
   <Asset Type="Graphics:FontDescription">
 
     <FontName>SimSun</FontName>
-    <Size>24</Size>
+    <Size>16</Size>
     <Spacing>0</Spacing>
     <UseKerning>true</UseKerning>
     <Style>Regular</Style>

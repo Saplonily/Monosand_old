@@ -19,7 +19,8 @@ public class Core : Game
     public GameTime GameTime => gameTime;
     public Color? ClearColor { get; set; }
     public SpriteBatch SpriteBatch => spriteBatch;
-    public Scene Scene { get => scene; set => nextScene = value; }
+    public Scene Scene { get => scene; }
+    public Scene NextScene { set => nextScene = value; }
     public SamplerState DefaultCameraSamplerState { get; set; } = SamplerState.PointClamp;
     public double Fps
     {

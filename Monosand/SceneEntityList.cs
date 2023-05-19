@@ -5,15 +5,19 @@ namespace Monosand;
 public sealed class SceneEntityList : IReadOnlyCollection<Entity>
 {
     public Scene Scene { get; }
+    internal bool dirty = true;
     private readonly List<Entity> current;
     private readonly List<Entity> pendingAdd;
     private readonly List<Entity> pendingRemove;
     private readonly List<Entity> pendingAwake;
 
+    private readonly List<Entity> sortedCurrent;
+
     public SceneEntityList(Scene belongTo)
     {
         Scene = belongTo;
         current = new(8);
+        sortedCurrent = new(8);
         pendingAdd = new(4);
         pendingAwake = new(4);
         pendingRemove = new(2);
@@ -30,23 +34,32 @@ public sealed class SceneEntityList : IReadOnlyCollection<Entity>
         foreach (var entity in pendingRemove)
         {
             current.Remove(entity);
+            sortedCurrent.Remove(entity);
+            dirty = true;
             entity.Removed();
             entity.Scene = null;
         }
         foreach (var entity in pendingAdd)
         {
             current.Add(entity);
+            sortedCurrent.Add(entity);
+            dirty = true;
             pendingAwake.Add(entity);
             entity.Scene = Scene;
             entity.Added();
         }
         foreach (var entity in pendingAwake)
-        {
             entity.Awake();
-        }
+
         pendingAwake.Clear();
         pendingRemove.Clear();
         pendingAdd.Clear();
+
+        if (dirty)
+        {
+            sortedCurrent.Sort(Scene.EntitySorting);
+        }
+
         foreach (var entity in current)
         {
             entity.Update();
@@ -55,7 +68,7 @@ public sealed class SceneEntityList : IReadOnlyCollection<Entity>
 
     public void UpdateDeferred()
     {
-        foreach(var entity in current)
+        foreach (var entity in current)
         {
             entity.UpdateDeferred();
         }
@@ -63,10 +76,11 @@ public sealed class SceneEntityList : IReadOnlyCollection<Entity>
 
     public void Draw()
     {
-        foreach (var entity in current)
+        foreach (var entity in sortedCurrent)
         {
-            //TODO: depth
-            entity.Draw();
+            var vec = Scene.CameraCullingPadding;
+            if (entity.Bound.Inflated(vec.X, vec.Y).Intersects(Scene.Camera.Bound))
+                entity.Draw();
         }
     }
 

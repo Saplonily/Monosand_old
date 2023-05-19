@@ -9,7 +9,31 @@ public class MyGame : Core
         base.Initialize();
         Window.AllowUserResizing = true;
         PreferWindowSize(1200, 800);
-        Scene = new MyScene();
+        var s = new MyScene();
+        s.AddEntity(new TestEntity() { DepthLayer = -1 });
+        s.AddEntity(new TestEntity() { Depth = -1, Position = Vector2.One * 15f });
+        NextScene = s;
+    }
+}
+
+public class TestEntity : Entity
+{
+    float angle;
+
+    public TestEntity()
+    {
+        Size = new(400f, 40f);
+    }
+
+    public override void Draw()
+    {
+        base.Draw();
+        angle += MathF.PI / 180;
+        var s = Scene.Entities;
+        Drawing.DrawRectangle(Position, Size, Color.AliceBlue);
+        Drawing.DrawHollowRectangle(Position, Size, Color.Black);
+        Drawing.DrawHollowRectangle(Position, new(600f, 60f), Color.CornflowerBlue);
+        Drawing.DrawText(SceneAs<MyScene>().Font, $"d: {Depth}, l: {DepthLayer}", Bound.Center, TextAlign.Center, Color.CornflowerBlue);
     }
 }
 
@@ -35,7 +59,7 @@ public class MyScene : Scene
             dir += Vector2.UnitY;
         if (Input.IsKeyPressed(Keys.A))
             dir -= Vector2.UnitX;
-        Camera.Position += dir * 5;
+        Camera.Position += dir;
 
         if (Input.IsKeyPressed(Keys.E))
         {
@@ -46,14 +70,5 @@ public class MyScene : Scene
         {
             Camera.Rotation -= MathF.PI / 180;
         }
-    }
-
-    public override void Draw()
-    {
-        base.Draw();
-        Drawing.Batch.Begin(samplerState: CameraSamplerState, transformMatrix: Camera.InvertedMatrix);
-        Drawing.DrawText(Font, $"a quick brown fox jumps over the lazy dog", Vector2.Zero, Color.White);
-        Drawing.DrawLine(Camera.Bound.Size, Input.MousePosition, Color.White, 2f);
-        Drawing.Batch.End();
     }
 }

@@ -2,17 +2,25 @@
 
 public class Entity
 {
-    public double Layer;
-    public double Depth;
+    internal float depth;
+    internal float depthLayer;
     public Vector2 Position;
     public Vector2 Size;
 
+    public float DepthLayer { get => depthLayer; set { depthLayer = value; if (Scene is not null) Scene.Entities.dirty = true; } }
+    public float Depth { get => depth; set { depth = value; if (Scene is not null) Scene.Entities.dirty = true; } }
     public RectangleF Bound => new(Position, Size);
     public Scene Scene { get; internal set; }
     public EntityComponentList Components { get; internal set; }
 
     public Entity()
         => Components = new(this);
+
+    public static int CompareByDepth(Entity entityA, Entity entityB)
+    {
+        int lc = -entityA.depthLayer.CompareTo(entityB.depthLayer);
+        return lc != 0 ? lc : -entityA.depth.CompareTo(entityB.depth);
+    }
 
     public T SceneAs<T>() where T : Scene
         => Scene as T;

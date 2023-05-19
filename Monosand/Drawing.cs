@@ -29,6 +29,28 @@ public static class Drawing
     public static void DrawText(SpriteFont spriteFont, string text, Vector2 position, Vector2 origin, Vector2 scale, float rotation, Color color)
         => Batch.DrawString(spriteFont, text, position, color, rotation, origin, scale, SpriteEffects.None, 0f);
 
+    public static void DrawText(SpriteFont spriteFont, string text, Vector2 position, TextAlign align, Vector2 scale, float rotation, Color color)
+    {
+        RectangleF rf = new(Vector2.Zero, spriteFont.MeasureString(text));
+        Vector2 origin = align switch
+        {
+            TextAlign.LeftTop => rf.LeftTop,
+            TextAlign.TopCenter => rf.TopCenter,
+            TextAlign.RightTop => rf.RightTop,
+            TextAlign.RightCenter => rf.RightCenter,
+            TextAlign.RightBottom => rf.RightBottom,
+            TextAlign.BottomCenter => rf.BottomCenter,
+            TextAlign.LeftBottom => rf.LeftBottom,
+            TextAlign.LeftCenter => rf.LeftCenter,
+            TextAlign.Center => rf.Center,
+            _ => throw new ArgumentException("Invalid TextAlign.", nameof(align))
+        };
+        DrawText(spriteFont, text, position, origin, scale, rotation, color);
+    }
+
+    public static void DrawText(SpriteFont spriteFont, string text, Vector2 position, TextAlign align, Color color)
+        => DrawText(spriteFont, text, position, align, Vector2.One, 0f, color);
+
     public static void DrawPoint(Vector2 position, Color color)
         => Batch.Draw(Pixel, position, color);
 
@@ -49,6 +71,16 @@ public static class Drawing
 
     public static void DrawHollowRectangle(Vector2 position, Vector2 size, Color color, float thickness = 1f)
     {
+        if (size.X < 0)
+        {
+            size.X = -size.X;
+            position.X -= size.X;
+        }
+        if (size.Y < 0)
+        {
+            size.Y = -size.Y;
+            position.Y -= size.Y;
+        }
         var leftTop = position;
         var rightTop = position + new Vector2(size.X, 0f);
         var leftBottom = position + new Vector2(0f, size.Y);
@@ -69,4 +101,17 @@ public static class Drawing
         from.Round();
         Batch.Draw(Pixel, from, null, color, rotation, Vector2.Zero, new Vector2(float.Round(length), thickness), SpriteEffects.None, 0f);
     }
+}
+
+public enum TextAlign
+{
+    LeftTop = 1,
+    TopCenter,
+    RightTop,
+    RightCenter,
+    RightBottom,
+    BottomCenter,
+    LeftBottom,
+    LeftCenter,
+    Center
 }

@@ -16,9 +16,9 @@ public struct RectangleF
     [FieldOffset(0)] public float X;
     [FieldOffset(4)] public float Y;
 
-    [FieldOffset(0)] (float, float) TuplePosition;
-    [FieldOffset(8)] (float, float) TupleSize;
-    [FieldOffset(0)] (Vector2, Vector2) Tuple;
+    [FieldOffset(0)] public (float, float) TuplePosition;
+    [FieldOffset(8)] public (float, float) TupleSize;
+    [FieldOffset(0)] public (Vector2, Vector2) Tuple;
 
     public readonly float Right => Left + Width;
     public readonly float Bottom => Top + Height;
@@ -76,4 +76,16 @@ public struct RectangleF
 
     public readonly bool Intersects(RectangleF rect)
         => rect.Left < Right && rect.Right >= Left && rect.Top < Bottom && rect.Bottom >= Top;
+
+    public readonly RectangleF Inflated(float horizontal, float vertical)
+        => this with { X = X - horizontal, Y = Y - vertical, Width = Width + 2 * horizontal, Height = Height + 2 * vertical };
+
+    public void Inflate(float horizontal, float vertical)
+        => (X, Y, Width, Height) = (X - horizontal, Y - vertical, Width + 2 * horizontal, Height + 2 * vertical);
+
+    public readonly RectangleF ScaleInflated(float horizontalScale, float verticalScale)
+        => Inflated(Width * horizontalScale, Height * verticalScale);
+
+    public void ScaleInflate(float horizontalScale, float verticalScale)
+        => Inflate(Width * horizontalScale, Height * verticalScale);
 }
