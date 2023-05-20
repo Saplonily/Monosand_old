@@ -60,7 +60,14 @@ public sealed class Tracker
     }
 
     public IEnumerable<T> Get<T>()
-        => tracks[typeof(T)].Cast<T>();
+    {
+        if (tracks.TryGetValue(typeof(T), out var list))
+            return list.Cast<T>();
+        else
+            return !toBeTrackeds.ContainsKey(typeof(T)) 
+                ? throw new InvalidOperationException("Type not tracked.") 
+                : Enumerable.Empty<T>();
+    }
 
     public T First<T>()
         => Get<T>().First();

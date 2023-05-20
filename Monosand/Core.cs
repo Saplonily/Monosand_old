@@ -12,11 +12,13 @@ public class Core : Game
     public static Core CoreIns { get; private set; }
     internal static DisplayMode DisplayMode => GraphicsAdapter.DefaultAdapter.CurrentDisplayMode;
     public static Vector2 ScreenSize => new(DisplayMode.Width, DisplayMode.Height);
+    public static GameTime GameTime => CoreIns.gameTime;
+    public static double Delta => GameTime.ElapsedGameTime.TotalSeconds;
+    public static float DeltaF => (float)Delta;
     public Vector2 WindowSize => new(
         GraphicsDevice.PresentationParameters.BackBufferWidth,
         GraphicsDevice.PresentationParameters.BackBufferHeight
         );
-    public GameTime GameTime => gameTime;
     public Color? ClearColor { get; set; }
     public SpriteBatch SpriteBatch => spriteBatch;
     public Scene Scene { get => scene; }

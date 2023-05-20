@@ -10,30 +10,86 @@ public class MyGame : Core
         Window.AllowUserResizing = true;
         PreferWindowSize(1200, 800);
         var s = new MyScene();
-        s.AddEntity(new TestEntity() { DepthLayer = -1 });
-        s.AddEntity(new TestEntity() { Depth = -1, Position = Vector2.One * 15f });
         NextScene = s;
     }
 }
 
-public class TestEntity : Entity
+public class Player : Entity
 {
-    float angle;
+    public Vector2 Speed;
 
-    public TestEntity()
+    public Player()
     {
-        Size = new(400f, 40f);
+        Size = Vector2.One * 100f;
+        Collider = new BoxCollider(100f);
+    }
+
+    public override void Awake()
+    {
+        base.Awake();
+        Position = Scene.Camera.Bound.Center - Bound.Size / 2;
+    }
+
+    public override void Update()
+    {
+        base.Update();
+        Vector2 dir = Vector2.Zero;
+        if (Input.IsKeyPressed(Keys.A))
+            dir -= Vector2.UnitX;
+        if (Input.IsKeyPressed(Keys.D))
+            dir += Vector2.UnitX;
+        if (Input.IsKeyPressed(Keys.W))
+            dir -= Vector2.UnitY;
+        if (Input.IsKeyPressed(Keys.S))
+            dir += Vector2.UnitY;
+        dir = dir.SafeNormalized();
+        Speed = MathS.Approach(Speed, Vector2.Zero, 500f * Core.DeltaF);
+        Speed = MathS.Approach(Speed, dir * 500f, 4000f * Core.DeltaF);
+        Vector2 val = Speed * Core.DeltaF;
+        int xSign = Math.Sign(val.X);
+        int ySign = Math.Sign(val.Y);
+        while (xSign == 1 ? val.X > 0f : val.X < 0f)
+        {
+            Position.X += xSign;
+            val.X -= xSign;
+            if (Scene.Tracker.Get<Obstacle>().Any(o => o.Collider.CollideCheck(Collider)))
+            {
+                Position.X -= xSign;
+                break;
+            }
+        }
+        while (ySign == 1 ? val.Y > 0f : val.Y < 0f)
+        {
+            Position.Y += ySign;
+            val.Y -= ySign;
+            if (Scene.Tracker.Get<Obstacle>().Any(o => o.Collider.CollideCheck(Collider)))
+            {
+                Position.Y -= ySign;
+                break;
+            }
+        }
     }
 
     public override void Draw()
     {
         base.Draw();
-        angle += MathF.PI / 180;
-        Drawing.DrawRectangle(Position, Size, Color.AliceBlue);
-        Drawing.DrawHollowRectangle(Position, Size, Color.Black);
-        Drawing.DrawHollowRectangle(Position, new(600f, 60f), Color.CornflowerBlue);
-        Drawing.DrawText(SceneAs<MyScene>().Font, $"d: {Depth}, l: {DepthLayer}", Bound.Center, 
-            TextAlign.Center, Vector2.One, angle, Color.CornflowerBlue);
+        Drawing.DrawHollowRectangle(Position, Size, Color.White, 5f);
+    }
+}
+
+[Tracked]
+public class Obstacle : Entity
+{
+    public Obstacle()
+    {
+        Collider = new CircleCollider(100f);
+
+    }
+
+    public override void Draw()
+    {
+        base.Draw();
+        Drawing.DrawRectangle(Position - Vector2.One * 100f, Vector2.One * 200f, Color.CornflowerBlue);
     }
 }
 
@@ -45,30 +101,13 @@ public class MyScene : Scene
     {
         base.Begin();
         Font = Core.Asset.Load<SpriteFont>("font1");
-    }
-
-    public override void Update()
-    {
-        base.Update();
-        Vector2 dir = new();
-        if (Input.IsKeyPressed(Keys.D))
-            dir += Vector2.UnitX;
-        if (Input.IsKeyPressed(Keys.W))
-            dir -= Vector2.UnitY;
-        if (Input.IsKeyPressed(Keys.S))
-            dir += Vector2.UnitY;
-        if (Input.IsKeyPressed(Keys.A))
-            dir -= Vector2.UnitX;
-        Camera.Position += dir;
-
-        if (Input.IsKeyPressed(Keys.E))
+        AddEntity(new Player());
+        for (int i = 0; i < 2; i++)
         {
-            Camera.Rotation += MathF.PI / 180;
-        }
-
-        if (Input.IsKeyPressed(Keys.Q))
-        {
-            Camera.Rotation -= MathF.PI / 180;
+            Obstacle o = new();
+            Vector2 max = Camera.Bound.Size - o.Bound.Size;
+            o.Position = Random.Shared.NextVector2(max);
+            AddEntity(o);
         }
     }
 }

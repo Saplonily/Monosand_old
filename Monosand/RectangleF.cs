@@ -88,4 +88,7 @@ public struct RectangleF
 
     public void ScaleInflate(float horizontalScale, float verticalScale)
         => Inflate(Width * horizontalScale, Height * verticalScale);
+
+    public readonly RectangleF UnitedWith(RectangleF other)
+        => new(Math.Min(X, other.X), Math.Min(Y, other.Y), Math.Max(Width, other.Width), Math.Max(Height, other.Height));
 }

@@ -13,22 +13,10 @@
 
 #---------------------------------- Content ---------------------------------#
 
-#begin D:/User/Pictures/11SQ77MZXSQDB[CMXU3V63V.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:D:/User/Pictures/11SQ77MZXSQDB[CMXU3V63V.png;bg1.png
-
-#begin File.spritefont
+#begin font1.spritefont
 /importer:FontDescriptionImporter
 /processor:FontDescriptionProcessor
 /processorParam:PremultiplyAlpha=True
 /processorParam:TextureFormat=Compressed
-/build:File.spritefont;font1.spritefont
+/build:font1.spritefont
 

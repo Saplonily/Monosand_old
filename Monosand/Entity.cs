@@ -4,17 +4,22 @@ public class Entity
 {
     internal float depth;
     internal float depthLayer;
+    private Collider collider;
     public Vector2 Position;
-    public Vector2 Size;
+    public Vector2 Size; /* only used for visibility check and bound */
+    public Collider Collider { get => collider; set { collider = value; collider.Entity = this; } }
 
     public float DepthLayer { get => depthLayer; set { depthLayer = value; if (Scene is not null) Scene.Entities.dirty = true; } }
     public float Depth { get => depth; set { depth = value; if (Scene is not null) Scene.Entities.dirty = true; } }
-    public RectangleF Bound => new(Position, Size);
     public Scene Scene { get; internal set; }
+    public RectangleF Bound =>
+        Collider is not null ? Collider.GetAbsoluteBound().UnitedWith(new(Position, Size)) : new(Position, Size);
+
     public EntityComponentList Components { get; internal set; }
 
     public Entity()
         => Components = new(this);
+
 
     public static int CompareByDepth(Entity entityA, Entity entityB)
     {
