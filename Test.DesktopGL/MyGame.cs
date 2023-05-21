@@ -20,8 +20,8 @@ public class Player : Entity
 
     public Player()
     {
-        Size = Vector2.One * 100f;
-        Collider = new BoxCollider(100f);
+        Size = Vector2.One * 30f;
+        Collider = new BoxCollider(30f);
     }
 
     public override void Awake()
@@ -52,7 +52,7 @@ public class Player : Entity
         {
             Position.X += xSign;
             val.X -= xSign;
-            if (Scene.Tracker.Get<Obstacle>().Any(o => o.Collider.CollideCheck(Collider)))
+            if (Collider.CollideAny<Obstacle>())
             {
                 Position.X -= xSign;
                 break;
@@ -62,10 +62,18 @@ public class Player : Entity
         {
             Position.Y += ySign;
             val.Y -= ySign;
-            if (Scene.Tracker.Get<Obstacle>().Any(o => o.Collider.CollideCheck(Collider)))
+            if (Collider.CollideAny<Obstacle>())
             {
                 Position.Y -= ySign;
                 break;
+            }
+        }
+
+        if (Input.IsKeyJustPressed(Keys.C))
+        {
+            foreach (var c in Collider.CollideAll<Obstacle>())
+            {
+                c.RemoveSelf();
             }
         }
     }
@@ -82,14 +90,13 @@ public class Obstacle : Entity
 {
     public Obstacle()
     {
-        Collider = new CircleCollider(100f);
-
+        Collider = new BoxCollider(10f);
     }
 
     public override void Draw()
     {
         base.Draw();
-        Drawing.DrawRectangle(Position - Vector2.One * 100f, Vector2.One * 200f, Color.CornflowerBlue);
+        Drawing.DrawRectangle(Position, Vector2.One * 10f, Color.CornflowerBlue);
     }
 }
 
@@ -102,7 +109,7 @@ public class MyScene : Scene
         base.Begin();
         Font = Core.Asset.Load<SpriteFont>("font1");
         AddEntity(new Player());
-        for (int i = 0; i < 2; i++)
+        for (int i = 0; i < 200; i++)
         {
             Obstacle o = new();
             Vector2 max = Camera.Bound.Size - o.Bound.Size;

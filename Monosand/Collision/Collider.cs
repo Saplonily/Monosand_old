@@ -27,6 +27,11 @@ public abstract class Collider
 
     public Vector2 EntityPosition => entity.Position;
 
+    public abstract bool CollideCheck(BoxCollider other);
+    public abstract bool CollideCheck(CircleCollider other);
+    public abstract bool CollideCheck(Vector2 with);
+    public abstract RectangleF GetRelativeBound();
+
     public bool CollideCheck(Collider other) => other switch
     {
         BoxCollider c => CollideCheck(c),
@@ -49,8 +54,33 @@ public abstract class Collider
         return r with { Position = r.Position + EntityPosition };
     }
 
-    public abstract bool CollideCheck(BoxCollider other);
-    public abstract bool CollideCheck(CircleCollider other);
-    public abstract bool CollideCheck(Vector2 with);
-    public abstract RectangleF GetRelativeBound();
+    public bool TryCollideAny<T>(out Entity result) where T : Entity
+    {
+        foreach (var other in entity.Scene.Tracker.Get<T>())
+        {
+            if (this.CollideCheck(other.Collider))
+            {
+                result = other;
+                return true;
+            }
+        }
+        result = null;
+        return false;
+    }
+
+    public bool CollideAny<T>() where T : Entity
+        => TryCollideAny<T>(out _);
+
+    public IEnumerable<T> CollideAll<T>() where T : Entity
+    {
+        List<T> result = new();
+        foreach (var other in entity.Scene.Tracker.Get<T>())
+        {
+            if (this.CollideCheck(other.Collider))
+            {
+                result.Add(other);
+            }
+        }
+        return result;
+    }
 }

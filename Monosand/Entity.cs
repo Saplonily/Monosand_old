@@ -27,6 +27,9 @@ public class Entity
         return lc != 0 ? lc : -entityA.depth.CompareTo(entityB.depth);
     }
 
+    public void RemoveSelf()
+        => Scene.RemoveEntity(this);
+
     public T SceneAs<T>() where T : Scene
         => Scene as T;
 
