@@ -36,16 +36,31 @@ public class Scene
     public virtual void UpdateDeferred()
         => Entities.UpdateDeferred();
 
+    public virtual void BeginSceneDrawBatch()
+        => Drawing.Batch.Begin(
+            transformMatrix: Camera.InvertedMatrix,
+            samplerState: CameraSamplerState,
+            rasterizerState: RasterizerState.CullNone
+            );
+
+    public virtual void EndSceneDrawBatch()
+        => Drawing.Batch.End();
+
+    public virtual void BeginSceneShapeBatch()
+        => Drawing.ShapeBatch.Begin(
+            matrix: Camera.InvertedMatrix,
+            samplerState: CameraSamplerState,
+            rasterizerState: RasterizerState.CullNone
+            );
+
+    public virtual void EndSceneShapeBatch()
+        => Drawing.ShapeBatch.End();
+
     public virtual void Draw()
     {
-        var batch = Drawing.Batch;
-        var shape = Drawing.ShapeBatch;
-        //TODO: depth control
-        batch.Begin(transformMatrix: Camera.InvertedMatrix, samplerState: CameraSamplerState, rasterizerState: RasterizerState.CullNone, sortMode: SpriteSortMode.Immediate);
-        shape.Begin(matrix: Camera.InvertedMatrix, samplerState: CameraSamplerState, rasterizerState: RasterizerState.CullNone);
+        BeginSceneDrawBatch();
         Entities.Draw();
-        shape.End();
-        batch.End();
+        EndSceneDrawBatch();
     }
 
     public virtual void Begin()

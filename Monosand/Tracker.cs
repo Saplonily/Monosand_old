@@ -5,13 +5,17 @@ namespace Monosand;
 public sealed class Tracker
 {
     // 类(隐式, 显式被track的都有键)  ->  需要添加到的所有类(即所有父类和自己)
-    internal static Dictionary<Type, List<Type>> toBeTrackeds;
+    internal static Dictionary<Type, List<Type>> toBeTrackeds=new();
     private readonly Dictionary<Type, List<object>> tracks;
 
-    static Tracker()
+    public Tracker()
     {
-        toBeTrackeds = new();
-        var types = AppDomain.CurrentDomain.GetAssemblies().SelectMany(t => t.GetTypes());
+        tracks = new();
+    }
+
+    public static void InitWithAssembly(Assembly asm)
+    {
+        var types = asm.GetTypes();
         foreach (var t in types)
         {
             var attr = t.GetCustomAttribute<Tracked>();
@@ -34,11 +38,6 @@ public sealed class Tracker
                 }
             }
         }
-    }
-
-    public Tracker()
-    {
-        tracks = new();
     }
 
     internal void OnAdd(object obj)

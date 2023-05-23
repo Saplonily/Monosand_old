@@ -3,28 +3,22 @@
 		<OutputType>WinExe</OutputType>
 		<TargetFramework>net7</TargetFramework>
 		<RollForward>Major</RollForward>
-		<PublishReadyToRun>false</PublishReadyToRun>
 		<TieredCompilation>false</TieredCompilation>
 		<ImplicitUsings>enable</ImplicitUsings>
-	</PropertyGroup>
-	<PropertyGroup>
 		<ApplicationManifest>app.manifest</ApplicationManifest>
 		<ApplicationIcon>Icon.ico</ApplicationIcon>
+		<TrimMode>partial</TrimMode>
 	</PropertyGroup>
 	<ItemGroup>
+		<TrimmerRootAssembly Include="MonoGame.Framework" />
 		<None Remove="Icon.ico" />
 		<None Remove="Icon.bmp" />
 		<EmbeddedResource Include="Icon.ico" />
 		<EmbeddedResource Include="Icon.bmp" />
-	</ItemGroup>
-	<ItemGroup>
+		<None Include="..\.editorconfig" Link=".editorconfig" />
 		<PackageReference Include="MonoGame.Content.Builder.Task" Version="3.8.1.303" />
 		<PackageReference Include="MonoGame.Framework.DesktopGL.SapModded" Version="1.0.0" />
-	</ItemGroup>
-	<ItemGroup>
 		<ProjectReference Include="..\Monosand\Monosand.csproj" />
-	</ItemGroup>
-	<ItemGroup>
 		<Using Include="Microsoft.Xna.Framework" />
 		<Using Include="Microsoft.Xna.Framework.Graphics" />
 		<Using Include="Microsoft.Xna.Framework.Input" />

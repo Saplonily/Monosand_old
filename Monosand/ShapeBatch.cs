@@ -31,6 +31,12 @@ public sealed class ShapeBatch
         batchedItems = new();
     }
 
+    private void CheckState()
+    { 
+        if (!began) 
+            throw new InvalidOperationException("Begin hasn't called"); 
+    }
+
     public void Begin(
         BlendState blendState = default,
         SamplerState samplerState = default,
@@ -57,6 +63,7 @@ public sealed class ShapeBatch
         float thickness, LineEndStyle lineEndStyle = LineEndStyle.Rectangle
         )
     {
+        CheckState();
         if (lineEndStyle is LineEndStyle.Rectangle)
         {
             Vector2 dir = (to - from).SafeNormalized();
@@ -75,6 +82,7 @@ public sealed class ShapeBatch
 
     public void DrawRectangle(Vector2 leftTop, Vector2 rightBottom, Color color)
     {
+        CheckState();
         var vertexs = new VertexPositionColor[4]
         {
             new(new(leftTop, 0f), color),
@@ -89,6 +97,7 @@ public sealed class ShapeBatch
 
     public void DrawRectangle(Vector2 leftTop, Vector2 rightTop, Vector2 rightBottom, Vector2 leftBottom, Color color)
     {
+        CheckState();
         var vertexs = new VertexPositionColor[4]
         {
             new(new(leftTop, 0f), color),
@@ -116,7 +125,7 @@ public sealed class ShapeBatch
         defaultEffect.World = matrix;
         var vw = graphicsDevice.Viewport.Width;
         var vh = graphicsDevice.Viewport.Height;
-        // idk why but it works
+        // idk how, but it works
         defaultEffect.View = new Matrix(
             1.0f / vw * 2.0f, 0, 0, 0,
             0, -1.0f / vh * 2.0f, 0, 0,

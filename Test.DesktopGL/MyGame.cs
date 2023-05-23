@@ -8,6 +8,7 @@ public class MyGame : Core
     protected override void Initialize()
     {
         base.Initialize();
+        Tracker.InitWithAssembly(typeof(MyGame).Assembly);
         Window.AllowUserResizing = true;
         PreferWindowSize(1200, 800);
         var s = new MyScene();
@@ -23,6 +24,7 @@ public class Player : Entity
     {
         Size = Vector2.One * 100f;
         Collider = new BoxCollider(100f);
+        Depth = 200;
     }
 
     public override void Awake()
@@ -78,14 +80,15 @@ public class Player : Entity
             }
         }
     }
-    float r;
-
     public override void Draw()
     {
         base.Draw();
-        r++;
+        Scene.EndSceneDrawBatch();
+        Scene.BeginSceneShapeBatch();
         Drawing.ShapeBatch.DrawLine(Position, Position + Size, Color.White, 4f);
         Drawing.ShapeBatch.DrawLine(Position + new Vector2(Size.X, 0f), Position + new Vector2(0f, Size.Y), Color.White, 4f);
+        Scene.EndSceneShapeBatch();
+        Scene.BeginSceneDrawBatch();
 
         Drawing.DrawText(SceneAs<MyScene>().Font, Core.CoreIns.Fps.ToString(), Vector2.Zero, Color.Black);
     }

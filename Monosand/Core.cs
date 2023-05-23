@@ -1,5 +1,4 @@
 ﻿namespace Monosand;
-
 public class Core : Game
 {
     private GameTime gameTime;
