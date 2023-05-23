@@ -10,8 +10,16 @@ public class Program
 
     public static void Main(string[] args)
     {
-        AllocConsole();
-        using var game = new MyGame();
-        game.Run();
+        try
+        {
+            AllocConsole();
+            using var game = new MyGame();
+            game.Run();
+        }
+        catch(Exception e)
+        {
+            Console.WriteLine(e);
+            Console.ReadLine();
+        }
     }
 }

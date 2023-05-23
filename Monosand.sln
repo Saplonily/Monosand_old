@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test.DesktopGL", "Test.Desk
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Monosand", "Monosand\Monosand.csproj", "{9CA7DC5A-3C82-4E84-9302-A34E9C6F837B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.AndroidGL", "Test.AndroidGL\Test.AndroidGL.csproj", "{EBAED501-6F28-43B6-BB3D-7E956451A6FE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test.AndroidGL", "Test.AndroidGL\Test.AndroidGL.csproj", "{EBAED501-6F28-43B6-BB3D-7E956451A6FE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

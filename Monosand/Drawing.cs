@@ -3,6 +3,7 @@
 public static class Drawing
 {
     public static SpriteBatch Batch => Core.CoreIns.SpriteBatch;
+    public static ShapeBatch ShapeBatch => Core.CoreIns.ShapeBatch;
 
     public static readonly Texture2D Pixel;
 
@@ -114,4 +115,10 @@ public enum TextAlign
     LeftBottom,
     LeftCenter,
     Center
+}
+
+public enum LineEndStyle
+{
+    Circle = 1,
+    Rectangle
 }

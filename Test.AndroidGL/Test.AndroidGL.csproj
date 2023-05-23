@@ -18,6 +18,9 @@
 	  <PublishTrimmed>False</PublishTrimmed>
 	</PropertyGroup>
 	<ItemGroup>
+	  <None Include="..\.editorconfig" Link=".editorconfig" />
+	</ItemGroup>
+	<ItemGroup>
 		<PackageReference Include="MonoGame.Content.Builder.Task" Version="3.8.1.303" />
 		<PackageReference Include="MonoGame.Framework.Android" Version="3.8.1.303" />
 	</ItemGroup>

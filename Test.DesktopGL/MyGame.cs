@@ -1,4 +1,5 @@
-﻿using Monosand;
+﻿using Microsoft.Xna.Framework.Graphics;
+using Monosand;
 
 namespace Test.DesktopGL;
 
@@ -20,8 +21,8 @@ public class Player : Entity
 
     public Player()
     {
-        Size = Vector2.One * 30f;
-        Collider = new BoxCollider(30f);
+        Size = Vector2.One * 100f;
+        Collider = new BoxCollider(100f);
     }
 
     public override void Awake()
@@ -77,11 +78,16 @@ public class Player : Entity
             }
         }
     }
+    float r;
 
     public override void Draw()
     {
         base.Draw();
-        Drawing.DrawHollowRectangle(Position, Size, Color.White, 5f);
+        r++;
+        Drawing.ShapeBatch.DrawLine(Position, Position + Size, Color.White, 4f);
+        Drawing.ShapeBatch.DrawLine(Position + new Vector2(Size.X, 0f), Position + new Vector2(0f, Size.Y), Color.White, 4f);
+
+        Drawing.DrawText(SceneAs<MyScene>().Font, Core.CoreIns.Fps.ToString(), Vector2.Zero, Color.Black);
     }
 }
 
@@ -96,7 +102,7 @@ public class Obstacle : Entity
     public override void Draw()
     {
         base.Draw();
-        Drawing.DrawRectangle(Position, Vector2.One * 10f, Color.CornflowerBlue);
+        Drawing.DrawRectangle(Position, Vector2.One * 10f, Color.Black);
     }
 }
 
@@ -109,12 +115,18 @@ public class MyScene : Scene
         base.Begin();
         Font = Core.Asset.Load<SpriteFont>("font1");
         AddEntity(new Player());
-        for (int i = 0; i < 200; i++)
+        for (int i = 0; i < 50; i++)
         {
             Obstacle o = new();
             Vector2 max = Camera.Bound.Size - o.Bound.Size;
             o.Position = Random.Shared.NextVector2(max);
             AddEntity(o);
         }
+    }
+
+    public override void Draw()
+    {
+        Core.CoreIns.GraphicsDevice.Clear(Color.CornflowerBlue);
+        base.Draw();
     }
 }

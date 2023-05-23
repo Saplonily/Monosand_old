@@ -2,6 +2,8 @@
 
 public static class MathS
 {
+    public const float Sqrt2 = 1.41421356237309504880168872420969f;
+
     public static float Approach(float value, float target, float maxMove)
         => value <= target ? Math.Min(value + maxMove, target) : Math.Max(value - maxMove, target);
 
@@ -31,6 +33,9 @@ public static class MathS
         float l = value.LengthSquared();
         return l != 0 ? value / MathF.Sqrt(l) : whenZero;
     }
+
+    public static Vector2 Perpendicular(this Vector2 vector)
+        => new(-vector.Y, vector.X);
 
     #region RandomMath
 

@@ -39,8 +39,12 @@ public class Scene
     public virtual void Draw()
     {
         var batch = Drawing.Batch;
-        batch.Begin(transformMatrix: Camera.InvertedMatrix, samplerState: CameraSamplerState);
+        var shape = Drawing.ShapeBatch;
+        //TODO: depth control
+        batch.Begin(transformMatrix: Camera.InvertedMatrix, samplerState: CameraSamplerState, rasterizerState: RasterizerState.CullNone, sortMode: SpriteSortMode.Immediate);
+        shape.Begin(matrix: Camera.InvertedMatrix, samplerState: CameraSamplerState, rasterizerState: RasterizerState.CullNone);
         Entities.Draw();
+        shape.End();
         batch.End();
     }
 

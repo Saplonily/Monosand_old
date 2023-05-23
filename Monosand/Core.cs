@@ -7,6 +7,7 @@ public class Core : Game
     private Scene nextScene;
     protected GraphicsDeviceManager graphics;
     protected SpriteBatch spriteBatch;
+    protected ShapeBatch shapeBatch;
 
     public static ContentManager Asset => CoreIns.Content;
     public static Core CoreIns { get; private set; }
@@ -21,6 +22,7 @@ public class Core : Game
         );
     public Color? ClearColor { get; set; }
     public SpriteBatch SpriteBatch => spriteBatch;
+    public ShapeBatch ShapeBatch => shapeBatch;
     public Scene Scene { get => scene; }
     public Scene NextScene { set => nextScene = value; }
     public SamplerState DefaultCameraSamplerState { get; set; } = SamplerState.PointClamp;
@@ -54,6 +56,7 @@ public class Core : Game
     protected override void LoadContent()
     {
         spriteBatch = new SpriteBatch(GraphicsDevice);
+        shapeBatch = new ShapeBatch(GraphicsDevice);
     }
 
     protected override void Update(GameTime gameTime)
